@@ -15,7 +15,7 @@ def Crypto_Cesar(word_clair, cle_cesar):
     word_clair = word_clair.upper()
     tab_char = split(word_clair)
     tab_num = [ord(char) for char in tab_char]
-    tab_crypto = [chr(cle_cesar + verif(num)) for num in tab_num]
+    tab_crypto = [chr(verif(num + cle_cesar)) for num in tab_num]
     return ''.join(tab_crypto)
 ##########################
 
