@@ -12,14 +12,14 @@ def split(word):
 
 def verif(num_char):
     if num_char>90 :
-        num_char = num_char-25
+        num_char = num_char-26
     return num_char
 
 def Crypto_Cesar(word_clair, cle_cesar):
     word_clair = word_clair.upper()
     tab_char = split(word_clair)
     tab_num = [ord(char) for char in tab_char]
-    tab_crypto = [chr(verif((num - 1) + cle_cesar)) for num in tab_num]
+    tab_crypto = [chr(verif(num + cle_cesar)) for num in tab_num]
     return ''.join(tab_crypto)
 ##########################
 
