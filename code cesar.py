@@ -2,7 +2,11 @@ from tkinter import *
 
 from tkinter import messagebox
 
-########################
+
+
+###CODE PYTHON###
+
+####FONCTIONS DE CRYPTAGE CODE CESAR####
 def split(word):
     return [char for char in word]
 
@@ -19,12 +23,9 @@ def Crypto_Cesar(word_clair, cle_cesar):
     return ''.join(tab_crypto)
 ##########################
 
-window=Tk()
-window.geometry("500x500")
-window.title("Code césar")
-window.resizable(False, False)
+###FONCTION PRINCIPALE###
 
-###CODE PYTHON###
+
 
 def cesarCode():
 
@@ -47,36 +48,50 @@ def cesarCode():
     messageSasie = message.get() ###Variable contenant la saisie du message depuis l'interface
     cleSaisie = int(cle.get()) ###Variable contenant la saisie de la clé depuis l'interface
     
-    CryptedMessage = Crypto_Cesar(messageSasie, cleSaisie)
-    #CryptedMessage = str() ###Variable qui contiendra le message une fois crypté
+    CryptedMessage = Crypto_Cesar(messageSasie, cleSaisie) ###Variable qui contient le message une fois crypté
     
     
     
-    ###Pour afficher le resultat sur l'interface : resultText.set("leResultat")
     
-
-    
+    resultText.set("Code crypté : "+CryptedMessage)
     
 
-#################
+    
+
+##########################
+
+###INTERFACE###
+
+window=Tk()
+window.geometry("500x400")
+window.title("Code césar")
+window.resizable(False, False)
+
 message = StringVar()
 cle = StringVar()
 resultText = StringVar()
 
-label1=Label(window,text="Cryptage d'un message en code césar",fg="blue",font=("arial",16,"bold")).place(x=50,y=110)
+label1=Label(window,text="Cryptage d'un message en code césar",fg="blue",font=("arial",16,"bold")).place(x=50,y=50)
 
-labelMsg = Label(window,text="Message à crypter :",font=("arial",12)).place(x=100,y=197)
-textBoxMsg = Entry(window, width=20, textvariable = message).place(x=260, y=200)
+labelMsg = Label(window,text="Message à crypter :",font=("arial",12)).place(x=100,y=107)
+textBoxMsg = Entry(window, width=20, textvariable = message).place(x=260, y=110)
 
 
-labelCle = Label(window,text="Clé de crytpage :",font=("arial",12)).place(x=119,y=247)
-textBoxCle = Entry(window, width=20, textvariable = cle).place(x=260, y=250)
+labelCle = Label(window,text="Clé de crytpage :",font=("arial",12)).place(x=119,y=147)
+textBoxCle = Entry(window, width=20, textvariable = cle).place(x=260, y=150)
 
-labelResult = Label(window,text="", fg = "green", font=("arial",12), textvariable=resultText).place(x=180,y=290)
+labelResult = Label(window,text="", fg = "green", font=("arial",12), textvariable=resultText)
+labelResult.config(anchor=CENTER)
+labelResult.pack(pady=180)
 
 bouton1=Button(window,text="Valider",relief=RAISED,font=("arial",12,"bold"),command=cesarCode)
-bouton1.place(x=210, y=350)
+bouton1.config(anchor=CENTER)
+bouton1.place(x=215, y=250)
+
+
 
 
 
 window.mainloop()
+
+#################
