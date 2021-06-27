@@ -2,7 +2,22 @@ from tkinter import *
 
 from tkinter import messagebox
 
+########################
+def split(word):
+    return [char for char in word]
 
+def verif(num_char):
+    if num_char>90 :
+        num_char = num_char-25
+    return num_char
+
+def Crypto_Cesar(word_clair, cle_cesar):
+    word_clair = word_clair.upper()
+    tab_char = split(word_clair)
+    tab_num = [ord(char) for char in tab_char]
+    tab_crypto = [chr(cle_cesar + verif(num)) for num in tab_num]
+    return ''.join(tab_crypto)
+##########################
 
 window=Tk()
 window.geometry("500x500")
@@ -31,7 +46,9 @@ def cesarCode():
 
     messageSasie = message.get() ###Variable contenant la saisie du message depuis l'interface
     cleSaisie = int(cle.get()) ###Variable contenant la saisie de la clé depuis l'interface
-    CryptedMessage = str() ###Variable qui contiendra le message une fois crypté
+    
+    CryptedMessage = Crypto_Cesar(messageSasie, cleSaisie)
+    #CryptedMessage = str() ###Variable qui contiendra le message une fois crypté
     
     
     
