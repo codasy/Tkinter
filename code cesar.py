@@ -23,7 +23,7 @@ def Crypto_Cesar(word_clair, cle_cesar):
     tab_crypto = [chr(verif(num + cle_cesar)) for num in tab_num]
     return ''.join(tab_crypto)
 
-def read_file(file_in):
+def read_file(file_in, cle_cesar):
     if not os.path.isfile(file_in):
         print('File does not exist.')
     else:
@@ -32,7 +32,7 @@ def read_file(file_in):
     file = ['']
     cpt = 0
     for line in content:
-        file[cpt] = Crypto_Cesar(line)
+        file[cpt] = Crypto_Cesar(line, cle_cesar)
         cpt += 1
     return file
 ##########################
