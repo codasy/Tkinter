@@ -2,6 +2,7 @@ from tkinter import *
 
 from tkinter import messagebox
 
+import os.path
 
 
 ###CODE PYTHON###
@@ -21,6 +22,19 @@ def Crypto_Cesar(word_clair, cle_cesar):
     tab_num = [ord(char) for char in tab_char]
     tab_crypto = [chr(verif(num + cle_cesar)) for num in tab_num]
     return ''.join(tab_crypto)
+
+def read_file(file_in):
+    if not os.path.isfile(file_in):
+        print('File does not exist.')
+    else:
+        with open(filename) as f:
+            content = f.read().splitlines()
+    file = ['']
+    cpt = 0
+    for line in content:
+        file[cpt] = Crypto_Cesar(line)
+        cpt += 1
+    return file
 ##########################
 
 ###FONCTION PRINCIPALE###
