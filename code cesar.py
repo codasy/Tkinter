@@ -40,7 +40,12 @@ def split(word):
 
 def verif(num_char):
     if num_char>90 :
-        num_char = num_char-25
+        num_char = num_char-26
+    return num_char
+
+def verif_inverse(num_char):
+    if num_char<65 :
+        num_char = num_char+26
     return num_char
 
 def Crypto_Cesar(word_clair, cle_cesar, whichWindow):
@@ -49,27 +54,58 @@ def Crypto_Cesar(word_clair, cle_cesar, whichWindow):
         word_clair = word_clair.upper()
         tab_char = split(word_clair)
         tab_num = [ord(char) for char in tab_char]
-        tab_crypto = [chr(verif((num - 1) + cle_cesar)) for num in tab_num]
+        tab_crypto = [chr(verif((num) + cle_cesar)) for num in tab_num]
         return ''.join(tab_crypto)
     
     elif (whichWindow == "decrypt"):  ######## Si l'utilisateur a cliqué sur le bouton "Valider" de la fenêtre de décryptage
-        return "blabla" ###test de passage
+        word_clair = word_clair.upper()
+        tab_char = split(word_clair)
+        tab_num = [ord(char) for char in tab_char]
+        tab_crypto = [chr(verif_inverse(num - cle_cesar)) for num in tab_num]
+        return ''.join(tab_crypto)
+        
 
 ################################################
 
 ####FONCTIONS DE CRYPTAGE ET DECRYPTAGE FICHIER TXT CODE CESAR####
 
 def Crypto_CesarTXT(pathFichierTxt, cle_cesar, whichWindow):
+    
+    ###Compter le nombre de ligne###
+    txt = open(pathFichierTxt)
+    lineCount = 0
+
+    for line in txt:
+        if line != "\n":
+            lineCount += 1
+    ################################
+            
     if (whichWindow == "crypt"):
-        
-        ###CODE CRYPTAGE VIA FICHIER TXT###
-        return pathFichierTxt ###test de passage
+          
+        with open(pathFichierTxt) as f:
+            content = f.read().splitlines()
+            
+        file = [ 0 for _ in range(lineCount)]
+        cpt = 0
+    
+        for line in content:
+            file[cpt] = Crypto_Cesar(line, cle_cesar, whichWindow)
+            cpt += 1
+        return file
+
     
     elif (whichWindow == "decrypt"):
         
-        ###CODE DECRYPTAGE VIA FICHIER TXT###
+        with open(pathFichierTxt) as f:
+            content = f.read().splitlines()
+        file = [ 0 for _ in range(lineCount)]
+        cpt = 0
+    
+        for line in content:
+            file[cpt] = Crypto_Cesar(line, cle_cesar, whichWindow)
+            cpt += 1
+        return file
         
-        return pathFichierTxt###test de passage
 
 ##################################################
 
@@ -84,7 +120,7 @@ def Crypto_CesarTXT(pathFichierTxt, cle_cesar, whichWindow):
 
 def cesarCodeCrypt():
 
-    
+    listResultCrypt.delete(0, END)
     ###Gestion des erreurs de saisie###
     
     if(MsgTxtCrypt.get() == "" and messageCrypt.get() == ""):
@@ -112,10 +148,21 @@ def cesarCodeCrypt():
     if (messageSaisie and fichierTxtSaisie == ""):
         
         CryptedMessage = Crypto_Cesar(messageSaisie, cleSaisie, "crypt") ###Variable qui contient le message une fois crypté via la fonction de cryptage d'un message saisie
+
+        resultTextTitleCrypt.set("Code crypté : ")
+        listResultCrypt.insert(0,CryptedMessage)
         
     elif (fichierTxtSaisie and messageSaisie == ""):
         
         CryptedMessage = Crypto_CesarTXT(fichierTxtSaisie, cleSaisie, "crypt") ###Variable qui contient le message une fois crypté via la fonction fichier txt
+
+        
+        
+        resultTextTitleCrypt.set("Code crypté : ")
+        for lignes in CryptedMessage:
+            cpt = 0
+            listResultCrypt.insert(cpt, lignes)
+            cpt += 1
         
     else:
         
@@ -124,7 +171,7 @@ def cesarCodeCrypt():
     
     
     
-    resultTextCrypt.set("Code crypté : "+CryptedMessage)
+    
     
     ########################################################
     
@@ -138,7 +185,7 @@ def cesarCodeCrypt():
 
 def cesarCodeDecrypt():
 
-    
+    listResultDecrypt.delete(0, END)
     ###Gestion des erreurs de saisie###
     
     if(MsgTxtDecrypt.get() == "" and messageDecrypt.get() == ""):
@@ -165,11 +212,20 @@ def cesarCodeDecrypt():
 
     if (messageSaisie and fichierTxtSaisie == ""):
         
-        DeryptedMessage = Crypto_Cesar(messageSaisie, cleSaisie, "decrypt") ###Variable qui contient le message une fois decrypté via la fonction de cryptage d'un message saisie
+        DecryptedMessage = Crypto_Cesar(messageSaisie, cleSaisie, "decrypt") ###Variable qui contient le message une fois decrypté via la fonction de cryptage d'un message saisie
+
+        resultTextTitleCrypt.set("Code crypté : ")
+        listResultDecrypt.insert(0,DecryptedMessage)
         
     elif (fichierTxtSaisie and messageSaisie == ""):
         
-        DeryptedMessage = Crypto_CesarTXT(fichierTxtSaisie, cleSaisie, "decrypt") ###Variable qui contient le message une fois decrypté via la fonction fichier txt
+        DecryptedMessage = Crypto_CesarTXT(fichierTxtSaisie, cleSaisie, "decrypt") ###Variable qui contient le message une fois decrypté via la fonction fichier txt
+
+        resultTextTitleDecrypt.set("Code crypté : ")
+        for lignes in DecryptedMessage:
+            cpt = 0
+            listResultDecrypt.insert(cpt, lignes)
+            cpt += 1
         
     else:
         
@@ -178,18 +234,30 @@ def cesarCodeDecrypt():
     
     
     
-    resultTextDecrypt.set("Code decrypté : "+DeryptedMessage)
+    resultTextTitleDecrypt.set("Code décrypté : ")
+    resultTextDecrypt.set(DecryptedMessage)
     
     ########################################################
     
 
 #########################################################
 
+def clearMsgTxt(whichWindow):
+    if (whichWindow == "crypt"):
+        textBoxMsgTxtCrypt.config(state="normal")
+        textBoxMsgTxtCrypt.delete(0, END)
+        textBoxMsgTxtCrypt.config(state="disabled")
+    elif (whichWindow == "decrypt"):
+        textBoxMsgTxtDecrypt.config(state="normal")
+        textBoxMsgTxtDecrypt.delete(0, END)
+        textBoxMsgTxtDecrypt.config(state="disabled")
+        
+
 ###DEFINITION DES FENETRE DE CRYPTAGE ET DECRYPTAGE###
 
 
 windowCrypt=Tk()
-windowCrypt.geometry("1350x400")
+windowCrypt.geometry("1350x600")
 windowCrypt.title("Code césar")
 windowCrypt.resizable(False, False)
 
@@ -199,6 +267,7 @@ messageCrypt = StringVar()
 MsgTxtCrypt = StringVar()
 cleCrypt = StringVar()
 resultTextCrypt = StringVar()
+resultTextTitleCrypt = StringVar()
 
 ########################
 
@@ -208,6 +277,7 @@ messageDecrypt = StringVar()
 MsgTxtDecrypt = StringVar()
 cleDecrypt = StringVar()
 resultTextDecrypt = StringVar()
+resultTextTitleDecrypt = StringVar()
 
 ##########################
 
@@ -231,9 +301,11 @@ labelCleCrypt = Label(windowCrypt,text="Clé de cryptage :",font=("arial",12)).p
 textBoxCleCrypt = Entry(windowCrypt, width=30, textvariable = cleCrypt)
 textBoxCleCrypt.place(x=280, y=200)
 
-labelResultCrypt = Label(windowCrypt,text="", fg = "green", font=("arial",12), textvariable=resultTextCrypt)
-labelResultCrypt.config(anchor=CENTER)
-labelResultCrypt.place(x=180, y=320)
+labelResultTitleCrypt = Label(windowCrypt,text="", fg = "green", font=("arial",12), textvariable=resultTextTitleCrypt)
+labelResultTitleCrypt.config(anchor=CENTER)
+labelResultTitleCrypt.place(x=220, y=300)
+listResultCrypt = Listbox(windowCrypt, width=30)
+listResultCrypt.place(x=180, y=340)
 
 boutonCrypt=Button(windowCrypt,text="Valider",relief=RAISED,font=("arial",12,"bold"),command=cesarCodeCrypt)
 boutonCrypt.config(anchor=CENTER)
@@ -243,6 +315,9 @@ boutonCrypt.place(x=235, y=250)
 
 boutonCryptOpen=Button(windowCrypt,text="...",height=1,relief=RAISED,font=("arial",8),command=lambda: ouvrir("crypt"))
 boutonCryptOpen.place(x=475, y=155)
+
+boutonCryptClear=Button(windowCrypt,text="clear",height=1,relief=RAISED,font=("arial",8),command=lambda: clearMsgTxt("crypt"))
+boutonCryptClear.place(x=505, y=155)
 
 ########################
 
@@ -266,9 +341,11 @@ labelCleDecrypt = Label(windowCrypt,text="Clé de decryptage :",font=("arial",12
 textBoxCleDecrypt = Entry(windowCrypt, width=30, textvariable = cleDecrypt)
 textBoxCleDecrypt.place(x=980, y=200)
 
-labelResultDecrypt = Label(windowCrypt,text="", fg = "green", font=("arial",12), textvariable=resultTextDecrypt)
-labelResultDecrypt.config(anchor=CENTER)
-labelResultDecrypt.place(x=880, y=320)
+labelResultTitleDecrypt = Label(windowCrypt,text="", fg = "green", font=("arial",12), textvariable=resultTextTitleDecrypt)
+labelResultTitleDecrypt.config(anchor=CENTER)
+labelResultTitleDecrypt.place(x=915, y=300)
+listResultDecrypt = Listbox(windowCrypt, width=30)
+listResultDecrypt.place(x=880, y=340)
 
 boutonDecrypt=Button(windowCrypt,text="Valider",relief=RAISED,font=("arial",12,"bold"),command=cesarCodeDecrypt)
 boutonDecrypt.config(anchor=CENTER)
@@ -277,6 +354,9 @@ boutonDecrypt.place(x=935, y=250)
 
 boutonDecryptOpen=Button(windowCrypt,text="...",height=1,relief=RAISED,font=("arial",8),command=lambda: ouvrir("decrypt"))
 boutonDecryptOpen.place(x=1175, y=155)
+
+boutonDecryptClear=Button(windowCrypt,text="clear",height=1,relief=RAISED,font=("arial",8),command=lambda: clearMsgTxt("decrypt"))
+boutonDecryptClear.place(x=1205, y=155)
 
 ########################
 
