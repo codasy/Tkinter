@@ -39,7 +39,7 @@ def read_file(file_in, cle_cesar):
     if not os.path.isfile(file_in):
         print('File does not exist.')
     else:
-        with open(filename) as f:
+        with open(file_in,'r') as f:
             content = f.read().splitlines()
     file = ['']
     cpt = 0
@@ -47,6 +47,10 @@ def read_file(file_in, cle_cesar):
         file[cpt] = Crypto_Cesar(line, cle_cesar)
         cpt += 1
     return file
+
+def write_file(file_out,data):
+    with open(file_out,'w') as f:
+        f.writelines(data)
 ##########################
 
 ###FONCTION PRINCIPALE###
